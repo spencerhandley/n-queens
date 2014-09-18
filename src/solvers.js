@@ -14,20 +14,139 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  console.log("called")
+  var solution = null; //fixme
+  var initialBoard = new Board({n:n})
+  var checkBoard = function(board){
+    if (solution) {
+      return;
+    }
+    console.log("checking")
+    if(!boardIsValid(board)){
+      return false
+    }
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
-};
+    if(board.get('rooks') >= n){
+      solution = board.rows();
+      console.log("you win")
+      return
+    }
 
+    if(boardIsValid(board)){
 
+      var uniqueBoards = makeUniqueBoards(board);
+      for (var i = 0; i < uniqueBoards.length; i++){
+        checkBoard(uniqueBoards[i]);
+      }
+    }
+  }
+  checkBoard(initialBoard)
+  return solution
+}
+var boardIsValid = function(board){
+  if(!board.hasAnyColConflicts() && !board.hasAnyRowConflicts()){
+    return true
+  }
+  return false
+}
+
+var makeNewBoard = function(board, index){
+  var rowsHold = board.rows()
+  var boardMatrix = rowsHold
+  boardMatrix[index[0]][index[1]] = 1
+  var newBoard = new Board(boardMatrix)
+  return newBoard
+}
+
+var getRookCount = function(board){
+  var count = 0
+  for(var i = 0; i < board.length ; i++){
+    for(var j = 0; j < board.length ; j++){
+      if(board[i][j]){
+        count++
+      }
+    }
+  }
+  return count
+}
+
+var makeUniqueBoards = function(board){
+  var rookCount = board.get("rooks")
+  var rows = board.rows()
+  var n = board.get("n")
+  var newBoards = []
+  for(var i = 0; i < n; i++){
+    for(var j = 0; j < n; j++){
+      var holder = []
+      for(var l = 0 ; l< rows.length ; l++){
+        holder.push(rows[l].slice())
+      }
+      // console.log(rows[i][j])
+      if(!rows[i][j]){
+        var tempBoard = new Board(holder)
+        tempBoard.attributes[i][j] =1
+        tempBoard.set("rooks", rookCount + 1)
+        newBoards.push(tempBoard)
+      }
+    }
+  }
+  // console.log(newBoards)
+  return newBoards
+}
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0
+  var initialBoard = new Board({n:n})
+  var nHold = n
+  var solutionHolder = []
+  var checkBoard = function(board){
+    // if (solutionCount) {
+    //   return;
+    // }
+    // console.log("checking")
+    if(!boardIsValid(board)){
+      return
+    }
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+    if(board.get('rooks') >= n){
+      var row = board.attributes
+      var arrayHold =[]
+      for(var k in row){
+        for(var i = 0; i <row[k].length; i++){
+          if(row[k][i]){
+            arrayHold.push(i)
+          }
+        }
+      }
+      console.log("hey ther")
+      for(var j = 0; j < solutionHolder.length; j++){
+        for(var l =0; l <solutionHolder[j].length; l++){
+          console.log("hey, I'm here")
+          if(solutionHolder[j][i].indexOf(arrayHold[i])<0){
+            solutionHolder.push(arrayHold)
+            solutionCount++
+          }
+        }
+      }
+      console.log(solutionHolder)
+      console.log(board)
+      // console.log(solutionCount)
+      return
+
+    }
+
+    if(boardIsValid(board)){
+
+      var uniqueBoards = makeUniqueBoards(board);
+      for (var i = 0; i < uniqueBoards.length; i++){
+        checkBoard(uniqueBoards[i]);
+      }
+    }
+  }
+  checkBoard(initialBoard)
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  return solutionCount
 };
 
 

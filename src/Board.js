@@ -6,6 +6,8 @@
 
   window.Board = Backbone.Model.extend({
 
+
+
     initialize: function (params) {
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
@@ -13,8 +15,10 @@
         console.log('\t2. An array of arrays (a matrix). To create a populated board of size n:\n\t\t[ [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...] ] - Where each %c<val>%c is whatever value you want at that location on the board\n\t\t%cEXAMPLE: var board = new Board([[1,0,0],[0,1,0],[0,0,1]])', 'color: blue;', 'color: black;','color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
       } else if (params.hasOwnProperty('n')) {
         this.set(makeEmptyMatrix(this.get('n')));
+        this.set('rooks', 0);
       } else {
         this.set('n', params.length);
+        this.set('rooks', 0);
       }
     },
 
@@ -165,7 +169,6 @@
       var nHolder = this.get('n');
       var rows = this.rows();
       var columnInc = -(nHolder-1)
-      console.log(columnInc)
       for (var i = 0; i < nHolder*2; i++) {
         if(this.hasMajorDiagonalConflictAt( columnInc )){
           return true;
@@ -203,7 +206,6 @@
       var nHolder = this.get('n');
       var rows = this.rows();
       var columnInc = nHolder-1
-      console.log(columnInc)
       for (var i = (nHolder * 2) -1; i >= 0; i--) {
         if(this.hasMinorDiagonalConflictAt( columnInc )){
           return true;
