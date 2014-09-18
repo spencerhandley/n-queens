@@ -120,15 +120,10 @@ window.countNRooksSolutions = function(n) {
         }
       }
       console.log("hey ther")
-      for(var j = 0; j < solutionHolder.length; j++){
-        for(var l =0; l <solutionHolder[j].length; l++){
-          console.log("hey, I'm here")
-          if(solutionHolder[j][i].indexOf(arrayHold[i])<0){
-            solutionHolder.push(arrayHold)
-            solutionCount++
-          }
-        }
+      if(_.uniq(solutionHolder).indexOf(arrayHold.toString()) < 0){
+        solutionHolder.push(arrayHold.toString())
       }
+
       console.log(solutionHolder)
       console.log(board)
       // console.log(solutionCount)
@@ -146,7 +141,7 @@ window.countNRooksSolutions = function(n) {
   }
   checkBoard(initialBoard)
   // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount
+  return solutionHolder.length
 };
 
 
